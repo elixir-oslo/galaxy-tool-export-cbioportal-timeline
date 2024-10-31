@@ -4,13 +4,14 @@
         python3 export_cbioportal_timeline.py --path_all_study_directory "$path_all_study_directory" --input_data "$input_data" --study_id "$study_id" --case_id "$case_id"
     </command>
     <inputs>
-        <param name="path_all_study_directory" type="text" label="Path to all study directories." help="DO NOT CHANGE THIS IF YOU DON'T KNOW WHAT YOU ARE DOING!" value="/study" />
-        <param name="input_data" type="data" format="tabular" label="Input data file from history" />
-        <param name="study_id" type="text" label="Study ID" />
-        <param name="case_id" type="text" label="Case ID" />
+        <param name="path_all_study_directory" type="text" label="Path to all study directories." help="DO NOT CHANGE THIS IF YOU DON'T KNOW WHAT YOU ARE DOING!" value="/study" optional="false" />
+        <param name="input_data" type="data" format="tabular" label="Input data file from history" optional="false"  />
+        <param name="study_id" type="text" label="Study ID" optional="false"  />
+        <param name="case_id" type="text" label="Case ID" optional="false"  />
     </inputs>
     <outputs>
-        <data name="output" format="tabular" />
+        <data name="output_meta" format="tabular" label="Meta Timeline Output" />
+        <data name="output_data" format="tabular" label="Data Timeline Output" />
     </outputs>
     <help>
         This tool converts PyClone data to cBioPortal timeline format.

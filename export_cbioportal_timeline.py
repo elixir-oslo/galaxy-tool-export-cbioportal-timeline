@@ -37,7 +37,7 @@ def make_dataframe_timeline_from_input(patient_id: str, dict_event: dict, input_
 
     return result_df.drop_duplicates()
 
-def make_data_timeline(input_dataframe: pd.DataFrame, path_outfile: str) -> str:
+def make_data_timeline(input_dataframe: pd.DataFrame, path_outfile: str) -> pd.DataFrame:
     # Check if file exists
     if os.path.exists(path_outfile):
         previous_data = pd.read_csv(path_outfile, sep="\t", header=0)
@@ -47,6 +47,8 @@ def make_data_timeline(input_dataframe: pd.DataFrame, path_outfile: str) -> str:
         input_dataframe.to_csv(path_outfile, sep="\t", mode="a", header=False, index=False)
     else:
         input_dataframe.to_csv(path_outfile, sep="\t", index=False)
+
+    return input_dataframe
 
 
 
@@ -107,23 +109,31 @@ if __name__  == "__main__":
     name_data_file = "data_timeline_pyclone.txt"
     name_meta_file = "meta_timeline_pyclone.txt"
 
-    content_meta_timeline = make_meta_timeline(study_id, name_data_file)
-    dataframe_data_timeline = make_dataframe_timeline_from_input(case_id, dict_event, input_data)
+    content_meta_timeline = make_meta_timeline(args.study_id, name_data_file)
+    dataframe_data_timeline = make_dataframe_timeline_from_input(args.case_id, dict_event, args.input_data)
 
 
     # Make output directory
-    path_output_dir = os.path.join(path_all_study_directory, "partial_import", study_id)
+    path_output_dir = os.path.join(args.path_all_study_directory, "partial_import", args.study_id)
     os.makedirs(path_output_dir, exist_ok=True)
 
-    path_outfile_meta = os.path.join(path_output_dir, name_meta_file)
-    path_outfile_data = os.path.join(path_output_dir, name_data_file)
+    path_outfile_meta = os.path.join(str(path_output_dir), name_meta_file)
+    path_outfile_data = os.path.join(str(path_output_dir), name_data_file)
 
-    content_data_timeline = make_data_timeline(dataframe_data_timeline, path_outfile_data)
+    # Save files to study directory
+    dataframe_data_timeline_final = make_data_timeline(dataframe_data_timeline, path_outfile_data)
 
-
-    # Save files
     with open(os.path.join(path_outfile_meta, name_meta_file), "w") as f:
         f.write(content_meta_timeline)
+
+    # Save files to history
+    with open(args.output_meta, "w") as f:
+        f.write(content_meta_timeline)
+
+    dataframe_data_timeline_final.to_csv(args.output_data, sep="\t", index=False)
+
+
+
 
 
 
