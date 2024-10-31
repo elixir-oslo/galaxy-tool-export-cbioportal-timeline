@@ -41,6 +41,8 @@ def make_data_timeline(input_dataframe: pd.DataFrame, path_outfile: str) -> pd.D
     # Check if file exists
     if os.path.exists(path_outfile):
         previous_data = pd.read_csv(path_outfile, sep="\t", header=0)
+        print(previous_data)
+        print(input_dataframe)
         if input_dataframe["PATIENT_ID"].isin(previous_data["PATIENT_ID"]).any():
             previous_data = previous_data[~previous_data["PATIENT_ID"].isin(input_dataframe["PATIENT_ID"])]
             previous_data.to_csv(path_outfile, sep="\t", index=False)
