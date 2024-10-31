@@ -10,8 +10,8 @@
         <param name="case_id" type="text" label="Case ID" optional="false"  />
     </inputs>
     <outputs>
-        <data name="output_meta" format="tabular" label="Meta Timeline Output" />
-        <data name="output_data" format="tabular" label="Data Timeline Output" />
+        <data name="meta_timeline_pyclone.txt" format="yaml" label="Meta Timeline Output" />
+        <data name="data_timeline_pyclone.txt" format="tabular" label="Data Timeline Output" />
     </outputs>
     <help>
         This tool converts PyClone data to cBioPortal timeline format.

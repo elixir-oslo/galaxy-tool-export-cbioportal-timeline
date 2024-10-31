@@ -127,10 +127,10 @@ if __name__  == "__main__":
         f.write(content_meta_timeline)
 
     # Save files to history
-    with open(args.output_meta, "w") as f:
+    with open(name_meta_file, "w") as f:
         f.write(content_meta_timeline)
 
-    dataframe_data_timeline_final.to_csv(args.output_data, sep="\t", index=False)
+    dataframe_data_timeline_final.to_csv(name_data_file, sep="\t", index=False)
 
 
 
