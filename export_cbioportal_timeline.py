@@ -123,8 +123,7 @@ if __name__  == "__main__":
     # Save files to study directory
     dataframe_data_timeline_final = make_data_timeline(dataframe_data_timeline, path_outfile_data)
 
-    print(os.path.join(path_outfile_meta, name_meta_file))
-    with open(os.path.join(path_outfile_meta, name_meta_file), "w") as f:
+    with open(path_outfile_data, "w") as f:
         f.write(content_meta_timeline)
 
     # Save files to history
