@@ -1,19 +1,38 @@
-<tool id="export_cbioportal_timeline" name="Convert PyClone to cBioPortal Timeline" version="1.0.0">
+<tool id="export_cbioportal_timeline" name="Load PyClone-VI output to cBioPortal Timeline" version="1.0.3">
     <description>Convert PyClone data to cBioPortal timeline format</description>
-    <command>
-        python ${__tool_directory__}/export_cbioportal_timeline.py --path_all_study_directory "$path_all_study_directory" --input_data "$input_data" --study_id "$study_id" --case_id "$case_id"
+    <command interpreter="python">
+        #set $timepoints_str = ",".join(["%s,%s,%s" % (tp['event_id'], tp['start_date'], tp['stop_date']) for tp in $timepoints])
+        ${__tool_directory__}/export_cbioportal_timeline.py --input_data "$input_data" --study_id "$study_id" --case_id "$case_id" --meta_file_output "$meta_file" --data_file_output "$data_file" --timepoints "$timepoints_str"
     </command>
+    <environment_variables>
+        <environment_variable name="CBIOPORTAL_URL">http://cbioportal-galaxy-connector-container:3001/export-timeline-to-cbioportal</environment_variable>
+    </environment_variables>
     <inputs>
-        <param name="path_all_study_directory" type="text" label="Path to all study directories." help="DO NOT CHANGE THIS IF YOU DON'T KNOW WHAT YOU ARE DOING!" value="/study" optional="false" />
-        <param name="input_data" type="data" format="tabular" label="Input data file from history" optional="false"  />
-        <param name="study_id" type="text" label="Study ID" optional="false"  />
-        <param name="case_id" type="text" label="Case ID" optional="false"  />
+        <param name="cbioportal_url" type="text" label="cBioPortal URL" optional="false" value="http://localhost:3000" />
+        <param name="input_data" type="data" format="tabular" label="Input data file from history" optional="false" />
+        <param name="study_id" type="text" label="Study ID" optional="false" value="nsclc_tracerx_2017" />
+        <param name="case_id" type="text" label="Case ID" optional="false" value="CRUK0009" />
+        <repeat name="timepoints" title="Annotate timepoint" help="Annotate every timepoints of experiments. Timepoints without annotation will not be imported to cBioportal!!" min="1">
+            <param name="event_id" type="text" label="Event ID" help="Must match an ID from the Pyclone-VI TSV output" optional="false" />
+            <param name="start_date" type="text" label="Start Date" help="In days from the start point/birth" optional="false" />
+            <param name="stop_date" type="text" label="Stop Date" help="In days from the start point/birth. Can be empty." />
+        </repeat>
     </inputs>
     <outputs>
-        <data name="meta_timeline_pyclone.txt" format="yaml" label="Meta Timeline Output" />
-        <data name="data_timeline_pyclone.txt" format="tabular" label="Data Timeline Output" />
+        <data name="meta_file" format="txt" label="Meta Timeline: ${tool.name} on ${study_id}_${case_id}_${on_string}" />
+        <data name="data_file" format="tabular" label="Data Timeline: ${tool.name} on ${study_id}_${case_id}_${on_string}" />
     </outputs>
     <help>
-        This tool converts PyClone data to cBioPortal timeline format.
+        This tool converts PyClone-VI data to cBioPortal timeline format and loads it to cBioPortal.
+        It generates two files: a meta file and a data file of data added to cBioportal.
+        If the Pyclone-VI data from this patient is already in cBioPortal, the data will be updated.
+
+        The input data file should be the output of the PyClone-VI tool.
+
+        The study ID and case ID are required to identify the data in cBioPortal.
+        The timepoints should be annotated with event IDs, start dates, and stop dates.
+        The start date is the number of days from the start point or birth.
+        The stop date is the number of days from the start point or birth and can be empty.
+        The meta file contains the metadata for the timeline, and the data file contains the data for the timeline.
     </help>
 </tool>
