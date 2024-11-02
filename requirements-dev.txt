@@ -1,3 +1,2 @@
 unittest
 semantic-release
-@semantic-release/release-notes-generator
