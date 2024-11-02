@@ -31,14 +31,10 @@ jobs:
 
     - name: Install JavaScript dependencies
       run: |
-        npm install @semantic-release/release-notes-generator
-
-    - name: Install semantic-release
-      run: |
-        pip install semantic-release
+        npm install
 
     - name: Run semantic-release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        semantic-release --extends ./release.config.js
+        npx semantic-release --extends ./release.config.js
