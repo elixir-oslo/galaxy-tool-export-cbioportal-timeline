@@ -8,7 +8,6 @@
         <environment_variable name="CBIOPORTAL_URL">http://cbioportal-galaxy-connector-container:3001/export-timeline-to-cbioportal</environment_variable>
     </environment_variables>
     <inputs>
-        <param name="cbioportal_url" type="text" label="cBioPortal URL" optional="false" value="http://localhost:3000" />
         <param name="input_data" type="data" format="tabular" label="Input data file from history" optional="false" />
         <param name="study_id" type="text" label="Study ID" optional="false" value="nsclc_tracerx_2017" />
         <param name="case_id" type="text" label="Case ID" optional="false" value="CRUK0009" />
