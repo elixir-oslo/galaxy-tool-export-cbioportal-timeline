@@ -2,11 +2,11 @@
     <description>Convert PyClone data to cBioPortal timeline format</description>
     <command interpreter="python">
         #set $timepoints_str = ",".join(["%s,%s,%s" % (tp['event_id'], tp['start_date'], tp['stop_date']) for tp in $timepoints])
-        ${__tool_directory__}/export_cbioportal_timeline.py --input_data "$input_data" --study_id "$study_id" --case_id "$case_id" --meta_file_output "$meta_file" --data_file_output "$data_file" --timepoints "$timepoints_str"
+        ${__tool_directory__}/export_cbioportal_timeline.py --env_dir_path "${__tool_directory__}/.env" --input_data "$input_data" --study_id "$study_id" --case_id "$case_id" --meta_file_output "$meta_file" --data_file_output "$data_file" --timepoints "$timepoints_str"
     </command>
-    <environment_variables>
-        <environment_variable name="CBIOPORTAL_URL">http://cbioportal-galaxy-connector-container:3001/export-timeline-to-cbioportal</environment_variable>
-    </environment_variables>
+<!--    <environment_variables>-->
+<!--        <environment_variable name="EXPORT_TIMELINE_ENDPOINT">http://cbioportal-galaxy-connector-container:3001/export-timeline-to-cbioportal</environment_variable>-->
+<!--    </environment_variables>-->
     <inputs>
         <param name="input_data" type="data" format="tabular" label="Input data file from history" optional="false" />
         <param name="study_id" type="text" label="Study ID" optional="false" value="nsclc_tracerx_2017" />

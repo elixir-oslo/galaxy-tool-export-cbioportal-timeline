@@ -3,6 +3,7 @@ import os
 
 import requests
 import pandas as pd
+from dotenv import load_dotenv
 
 
 def parse_events(events_str: str) -> dict:
@@ -63,9 +64,9 @@ def make_dataframe_timeline_from_input(patient_id: str, dict_event: dict, input_
 
 def export_timeline_to_cbioportal(df_data_content: pd.DataFrame, meta_content: str, case_id: str, study_id: str, suffix: str="pyclone") -> requests.Response:
     # url = "http://cbioportal-galaxy-connector-container:3001/export-timeline-to-cbioportal"
-    url = os.getenv('CBIOPORTAL_URL')
+    url = os.getenv('EXPORT_TIMELINE_ENDPOINT')
     if not url:
-        raise ValueError("CBIOPORTAL_URL environment variable is not set")
+        raise ValueError("EXPORT_TIMELINE_ENDPOINT environment variable is not set")
 
     # Convert dataframe to string
     data_content = df_data_content.to_csv(sep="\t", index=False)
@@ -94,9 +95,12 @@ if __name__ == "__main__":
     parser.add_argument("-mo", "--meta_file_output", required=True, help="Output meta file path")
     parser.add_argument("-do", "--data_file_output", required=True, help="Output data file path")
     parser.add_argument("-t", "--timepoints", help="String of timepoints separated by comma")
+    parser.add_argument("-e", "--env_dir_path", help="Path to the .env file")
 
     args = parser.parse_args()
     dict_event = parse_events(args.timepoints)
+    load_dotenv(args.env_dir_path)
+
 
     # dict_event = {
     #     "LN1": {"start_date": "1", "stop_date": ""},
